@@ -3,8 +3,11 @@
 const mongoose = require('mongoose');
 
 const folderSchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true }
+  name: { type: String, required: true, /* unique: true */ },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
+
+folderSchema.index({name:1, userId:1}, {unique:true});  //compound index folder now unique for each user but can 
 
 // Add `createdAt` and `updatedAt` fields
 folderSchema.set('timestamps', true);
