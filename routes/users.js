@@ -1,7 +1,6 @@
 'use strict';
 
 const express = require('express');
-const mongoose = require('mongoose');
 
 const User = require('../models/user');
 
@@ -36,7 +35,10 @@ router.post('/users', (req, res, next) =>{
   // trimming them and expecting the user to understand.
   // We'll silently trim the other fields, because they aren't credentials used
   // to log in, so it's less of a problem.
-  fullname.trim();
+  if (fullname){
+    fullname.trim();
+  }
+  
   const explicitlyTrimmedFields = ['username', 'password'];
   const nonTrimmedFields = explicitlyTrimmedFields.find(
     field => req.body[field].trim() !== req.body[field]
@@ -64,7 +66,7 @@ router.post('/users', (req, res, next) =>{
   );
 
   if (tooSmallFields || tooLargeFields){
-    const err = tooSmallFields ? `Must be at least ${sizedFields[tooSmallFields].min} characters long`: `Must be at most ${sizedFields[tooLargeFields].min} characters long`
+    const err = tooSmallFields ? `Must be at least ${sizedFields[tooSmallFields].min} characters long`: `Must be at most ${sizedFields[tooLargeFields].min} characters long`;
   }
 
   User.find({username})       /////????????????
