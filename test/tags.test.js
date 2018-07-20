@@ -15,7 +15,7 @@ const seedUsers = require('../db/seed/users');
 const { TEST_MONGODB_URI, JWT_SECRET } = require('../config'); 
 
 chai.use(chaiHttp);
-const expect = chai.expect;
+const expect = chai.expect; 
 
 describe('Noteful API - Tags', function () {
   let user;
