@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/users', (req, res, next) =>{
   const requiredFields = ['username', 'password'];
   const missingField = requiredFields.find(field => !(field in req.body));
-  const {username, password, fullname} = req.body;
+  let {username, password, fullname} = req.body;
   
   if (missingField){
     const err = new Error(`Missing '${missingField}' in request body`);
@@ -35,10 +35,7 @@ router.post('/users', (req, res, next) =>{
   // trimming them and expecting the user to understand.
   // We'll silently trim the other fields, because they aren't credentials used
   // to log in, so it's less of a problem.
-  if (fullname){
-    fullname.trim();
-  }
-  
+    
   const explicitlyTrimmedFields = ['username', 'password'];
   const nonTrimmedFields = explicitlyTrimmedFields.find(
     field => req.body[field].trim() !== req.body[field]
@@ -62,19 +59,30 @@ router.post('/users', (req, res, next) =>{
   );
 
   const tooLargeFields = Object.keys(sizedFields).find(
-    field => 'max' in sizedFields[field] && req.body[field].trim().length < sizedFields[field].max
+    field => 'max' in sizedFields[field] && req.body[field].trim().length > sizedFields[field].max
   );
 
-  if (tooSmallFields || tooLargeFields){
-    const err = tooSmallFields ? `Must be at least ${sizedFields[tooSmallFields].min} characters long`: `Must be at most ${sizedFields[tooLargeFields].min} characters long`;
+  if (tooSmallFields){
+    const err = new Error (`Field: ${tooSmallFields} must be at least ${sizedFields[tooSmallFields].min} characters long`)
+    err.status = 422;
+    return next(err);
+  }
+  if (tooLargeFields){
+    const err = new Error (`Field: ${tooLargeFields} must be at most ${sizedFields[tooLargeFields].max} characters long`);
+    err.status = 422;
+    return next(err);
   }
 
-  User.find({username})       /////????????????
+  if (fullname){
+    fullname = fullname.trim();
+  }
+
+  User.find({username})      
     .count()
     .then(count => {
       if(count > 0){
         return Promise.reject({
-          code: 422,
+          code: 400,
           reason: 'ValidationError',
           message: `Username ${username} already exist, please pick a new one`,
           location: 'username'

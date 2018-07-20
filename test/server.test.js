@@ -22,6 +22,10 @@ describe('Reality Check', () => {
     expect(2 + 2).to.equal(4);
   });
 
+  it('string 6 + string 9 equals 69', () => {
+    expect('6' + '9').to.equal('69');
+  });
+
 });
 
 describe('Environment', () => {

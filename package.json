@@ -9,7 +9,7 @@
 	"main": "server.js",
 	"scripts": {
 		"start": "nodemon server.js",
-		"test": "cross-env NODE_ENV=test mocha --file test/server.test.js"
+		"test": "cross-env NODE_ENV=test mocha --file test/server.test.js --timeout 4000"
 	},
 	"dependencies": {
 		"bcryptjs": "^2.4.3",

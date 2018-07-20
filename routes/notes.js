@@ -5,8 +5,8 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 const Note = require('../models/note');
-const Folder = require('.models/folder');
-const Tag = require('.models/tag');
+const Folder = require('../models/folder');
+const Tag = require('../models/tag');
 
 const router = express.Router();
 
