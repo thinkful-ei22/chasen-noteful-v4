@@ -12,7 +12,7 @@ const User = require('../models/user');
 const seedTags = require('../db/seed/tags');
 const seedUsers = require('../db/seed/users');
 
-const { TEST_MONGODB_URI, JWT_SECRET } = require('../config');
+const { TEST_MONGODB_URI, JWT_SECRET } = require('../config'); 
 
 chai.use(chaiHttp);
 const expect = chai.expect;
